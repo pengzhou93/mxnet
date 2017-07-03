@@ -212,6 +212,8 @@ def multibox_layer(from_layers, num_classes, sizes=[.2, .95],
     anchor_layers = []
     num_classes += 1 # always use background as label 0
 
+    import ipdb; ipdb.set_trace()
+    
     for k, from_layer in enumerate(from_layers):
         from_name = from_layer.name
         # normalize

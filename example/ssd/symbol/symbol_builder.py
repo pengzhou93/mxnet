@@ -99,6 +99,10 @@ def get_symbol_train(network, num_classes, from_layers, num_filters, strides, pa
 
     # group output
     out = mx.symbol.Group([cls_prob, loc_loss, cls_label, det])
+
+    # import ipdb; ipdb.set_trace()
+    # mx.viz.plot_network(out, shape = {'data':(1, 3, 300, 300), 'label' : (1, 500, 5)}).view()
+
     return out
 
 def get_symbol(network, num_classes, from_layers, num_filters, sizes, ratios,
