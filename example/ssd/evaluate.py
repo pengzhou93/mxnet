@@ -11,9 +11,11 @@ def parse_args():
                         default=os.path.join(os.getcwd(), 'data', 'val.rec'), type=str)
     parser.add_argument('--list-path', dest='list_path', help='which list file to use',
                         default="", type=str)
-    parser.add_argument('--network', dest='network', type=str, default='vgg16_reduced',
+    parser.add_argument('--network', dest='network', type=str,
+                        # default='legacy_vgg16_ssd',
+                        default='resnet50',
                         help='which network to use')
-    parser.add_argument('--batch-size', dest='batch_size', type=int, default=32,
+    parser.add_argument('--batch-size', dest='batch_size', type=int, default=64,
                         help='evaluation batch size')
     parser.add_argument('--num-class', dest='num_class', type=int, default=20,
                         help='number of classes')
@@ -25,12 +27,17 @@ def parse_args():
     parser.add_argument('--epoch', dest='epoch', help='epoch of pretrained model',
                         default=0, type=int)
     parser.add_argument('--prefix', dest='prefix', help='load model prefix',
-                        default=os.path.join(os.getcwd(), 'model', 'ssd_'), type=str)
+                        default=os.path.join(os.getcwd(),
+                        './pretrain_models/mxnet/resnet50_512x512', 'ssd_'),
+                        # './pretrain_models/mxnet/vgg16_reduced_300x300/vgg16_ssd_300_voc0712_trainval', 'ssd_'),
+                        type=str)
     parser.add_argument('--gpus', dest='gpu_id', help='GPU devices to evaluate with',
                         default='0', type=str)
     parser.add_argument('--cpu', dest='cpu', help='use cpu to evaluate, this can be slow',
-                        action='store_true')
-    parser.add_argument('--data-shape', dest='data_shape', type=int, default=300,
+                        action='store_true', default = False)
+    parser.add_argument('--data-shape', dest='data_shape', type=int,
+                        default=512,
+                        # default=300,
                         help='set image shape')
     parser.add_argument('--mean-r', dest='mean_r', type=float, default=123,
                         help='red mean value')

@@ -1,9 +1,15 @@
 from __future__ import print_function
 import mxnet as mx
 import numpy as np
+import os
 from timeit import default_timer as timer
 from dataset.testdb import TestDB
 from dataset.iterator import DetIter
+
+def convert_ssd_model(prefix, epoch, symbol, args, auxs):
+    prefix = prefix + '_new'
+    mx.model.save_checkpoint(prefix, epoch, symbol, args, auxs)
+    pass
 
 class Detector(object):
     """
@@ -32,6 +38,11 @@ class Detector(object):
         if self.ctx is None:
             self.ctx = mx.cpu()
         load_symbol, args, auxs = mx.model.load_checkpoint(model_prefix, epoch)
+
+        # import ipdb; ipdb.set_trace()
+        # Convert legacy model to new model
+        # convert_ssd_model(model_prefix, epoch, symbol, args, auxs)
+        
         if symbol is None:
             symbol = load_symbol
         self.mod = mx.mod.Module(symbol, label_names=None, context=ctx)
@@ -91,6 +102,7 @@ class Detector(object):
         list of detection results in format [det0, det1...], det is in
         format np.array([id, score, xmin, ymin, xmax, ymax]...)
         """
+        
         test_db = TestDB(im_list, root_dir=root_dir, extension=extension)
         test_iter = DetIter(test_db, 1, self.data_shape, self.mean_pixels,
                             is_train=False)

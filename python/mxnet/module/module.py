@@ -273,6 +273,8 @@ class Module(BaseModule):
             else:
                 initializer(name, arr)
 
+        # import ipdb; ipdb.set_trace()
+
         attrs = self._symbol.attr_dict()
         for name, arr in self._arg_params.items():
             desc = InitDesc(name, attrs.get(name, None))
@@ -569,10 +571,11 @@ class Module(BaseModule):
             else:
                 new_dshape = [DataDesc(i.name, shape, i.dtype, i.layout) \
                               for i, shape in zip(self._data_shapes, new_data_shapes)]
-
+            
             if hasattr(data_batch, "provide_label") and data_batch.provide_label:
                 new_lshape = data_batch.provide_label
-            elif hasattr(data_batch, "label") and data_batch.label:
+            elif hasattr(data_batch, "label") and data_batch.label and self._label_shapes:
+            # elif hasattr(data_batch, "label") and data_batch.label:
                 new_lshape = [DataDesc(i.name, j.shape, i.dtype, i.layout) \
                               for i, j in zip(self._label_shapes, data_batch.label)]
             else:

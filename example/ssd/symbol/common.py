@@ -114,6 +114,8 @@ def multi_layer_feature(body, from_layers, num_filters, strides, pads, min_filte
 
     internals = body.get_internals()
     layers = []
+    # import ipdb; ipdb.set_trace()
+    
     for k, params in enumerate(zip(from_layers, num_filters, strides, pads)):
         from_layer, num_filter, s, p = params
         if from_layer.strip():

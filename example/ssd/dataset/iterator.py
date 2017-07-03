@@ -85,7 +85,7 @@ class DetRecordIter(mx.io.DataIter):
         self._batch = self.rec.next()
         if not self._batch:
             return False
-
+        
         if self.provide_label is None:
             # estimate the label shape for the first batch, always reshape to n*5
             first_label = self._batch.label[0][0].asnumpy()
@@ -180,8 +180,9 @@ class DetIter(mx.io.DataIter):
         if self.is_train:
             return [(k, v.shape) for k, v in self._label.items()]
         else:
+            # return [('label', None)]
             return []
-
+            
     def reset(self):
         self._current = 0
         if self._shuffle:

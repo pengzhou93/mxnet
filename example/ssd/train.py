@@ -8,31 +8,43 @@ from train.train_net import train_net
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a Single-shot detection network')
     parser.add_argument('--train-path', dest='train_path', help='train record to use',
-                        default=os.path.join(os.getcwd(), 'data', 'train.rec'), type=str)
+                        default=os.path.join(os.getcwd(), 'data', 'train.rec'),
+                        type=str)
     parser.add_argument('--train-list', dest='train_list', help='train list to use',
                         default="", type=str)
     parser.add_argument('--val-path', dest='val_path', help='validation record to use',
-                        default=os.path.join(os.getcwd(), 'data', 'val.rec'), type=str)
+                        default=os.path.join(os.getcwd(), 'data', 'val.rec'),
+                        type=str)
     parser.add_argument('--val-list', dest='val_list', help='validation list to use',
                         default="", type=str)
-    parser.add_argument('--network', dest='network', type=str, default='vgg16_reduced',
+    parser.add_argument('--network', dest='network', type=str,
+                        default='vgg16_reduced',
                         help='which network to use')
-    parser.add_argument('--batch-size', dest='batch_size', type=int, default=32,
+    parser.add_argument('--batch-size', dest='batch_size', type=int,
+                        default=32,
                         help='training batch size')
-    parser.add_argument('--resume', dest='resume', type=int, default=-1,
+    parser.add_argument('--resume', dest='resume', type=int,
+                        default=203,
                         help='resume training from epoch n')
-    parser.add_argument('--finetune', dest='finetune', type=int, default=-1,
+    parser.add_argument('--finetune', dest='finetune', type=int,
+                        default=-1,
                         help='finetune from epoch n, rename the model before doing this')
     parser.add_argument('--pretrained', dest='pretrained', help='pretrained model prefix',
-                        default=os.path.join(os.getcwd(), 'model', 'vgg16_reduced'), type=str)
+                        default='./pretrain_models/mxnet/vgg16_reduced_classification/' \
+                        'vgg16_reduced',
+                        # default=os.path.join(os.getcwd(), 'model', 'vgg16_reduced'),
+                        type=str)
     parser.add_argument('--epoch', dest='epoch', help='epoch of pretrained model',
-                        default=1, type=int)
+                        default=1,
+                        type=int)
     parser.add_argument('--prefix', dest='prefix', help='new model prefix',
-                        default=os.path.join(os.getcwd(), 'model', 'ssd'), type=str)
+                        default=os.path.join(os.getcwd(), 'model', 'ssd'),
+                        type=str)
     parser.add_argument('--gpus', dest='gpus', help='GPU devices to train with',
                         default='0', type=str)
     parser.add_argument('--begin-epoch', dest='begin_epoch', help='begin epoch of training',
-                        default=0, type=int)
+                        default=0,
+                        type=int)
     parser.add_argument('--end-epoch', dest='end_epoch', help='end epoch of training',
                         default=240, type=int)
     parser.add_argument('--frequent', dest='frequent', help='frequency of logging',
@@ -53,36 +65,45 @@ def parse_args():
                         help='green mean value')
     parser.add_argument('--mean-b', dest='mean_b', type=float, default=104,
                         help='blue mean value')
-    parser.add_argument('--lr-steps', dest='lr_refactor_step', type=str, default='80, 160',
+    parser.add_argument('--lr-steps', dest='lr_refactor_step', type=str,
+                        default='80, 160',
                         help='refactor learning rate at specified epochs')
-    parser.add_argument('--lr-factor', dest='lr_refactor_ratio', type=str, default=0.1,
+    parser.add_argument('--lr-factor', dest='lr_refactor_ratio', type=str,
+                        default=0.1,
                         help='ratio to refactor learning rate')
-    parser.add_argument('--freeze', dest='freeze_pattern', type=str, default="^(conv1_|conv2_).*",
+    parser.add_argument('--freeze', dest='freeze_pattern', type=str,
+                        default="^(conv1_|conv2_).*",
                         help='freeze layer pattern')
-    parser.add_argument('--log', dest='log_file', type=str, default="train.log",
+    parser.add_argument('--log', dest='log_file', type=str,
+                        default="train.log",
                         help='save training log to file')
-    parser.add_argument('--monitor', dest='monitor', type=int, default=0,
+    parser.add_argument('--monitor', dest='monitor', type=int,
+                        default=0,
                         help='log network parameters every N iters if larger than 0')
     parser.add_argument('--pattern', dest='monitor_pattern', type=str, default=".*",
                         help='monitor parameter pattern, as regex')
     parser.add_argument('--num-class', dest='num_class', type=int, default=20,
                         help='number of classes')
-    parser.add_argument('--num-example', dest='num_example', type=int, default=16551,
+    parser.add_argument('--num-example', dest='num_example', type=int,
+                        default=16551,
                         help='number of image examples')
     parser.add_argument('--class-names', dest='class_names', type=str,
                         default='aeroplane, bicycle, bird, boat, bottle, bus, \
                         car, cat, chair, cow, diningtable, dog, horse, motorbike, \
                         person, pottedplant, sheep, sofa, train, tvmonitor',
                         help='string of comma separated names, or text filename')
-    parser.add_argument('--nms', dest='nms_thresh', type=float, default=0.45,
+    parser.add_argument('--nms', dest='nms_thresh', type=float,
+                        default=0.45,
                         help='non-maximum suppression threshold')
     parser.add_argument('--overlap', dest='overlap_thresh', type=float, default=0.5,
                         help='evaluation overlap threshold')
     parser.add_argument('--force', dest='force_nms', type=bool, default=False,
                         help='force non-maximum suppression on different class')
-    parser.add_argument('--use-difficult', dest='use_difficult', type=bool, default=False,
+    parser.add_argument('--use-difficult', dest='use_difficult', type=bool,
+                        default=False,
                         help='use difficult ground-truths in evaluation')
-    parser.add_argument('--voc07', dest='use_voc07_metric', type=bool, default=True,
+    parser.add_argument('--voc07', dest='use_voc07_metric', type=bool,
+                        default=True,
                         help='use PASCAL VOC 07 11-point metric')
     args = parser.parse_args()
     return args
